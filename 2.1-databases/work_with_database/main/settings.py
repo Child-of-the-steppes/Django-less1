@@ -55,7 +55,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'USER': 'postgres',
-        'PASSWORD': 'Ext,rf2026',    # Введите пароль от пользователя PostgreSQL
+        'PASSWORD': '123',    # Введите пароль от пользователя PostgreSQL
     }
 }
 
