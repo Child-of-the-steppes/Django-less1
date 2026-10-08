@@ -1,6 +1,10 @@
 import csv
+from datetime import date
+from pathlib import Path
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from phones.models import Phone
 
 
@@ -9,9 +13,16 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        with open('phones.csv', 'r') as file:
-            phones = list(csv.DictReader(file, delimiter=';'))
-
-        for phone in phones:
-            # TODO: Добавьте сохранение модели
-            pass
+        csv_path = Path(settings.BASE_DIR) / 'phones.csv'
+        with csv_path.open(newline='', encoding='utf-8') as file:
+            for phone in csv.DictReader(file, delimiter=';'):
+                Phone.objects.update_or_create(
+                    id=int(phone['id']),
+                    defaults={
+                        'name': phone['name'],
+                        'image': phone['image'],
+                        'price': int(phone['price']),
+                        'release_date': date.fromisoformat(phone['release_date']),
+                        'lte_exists': phone['lte_exists'].strip().lower() == 'true',
+                    },
+                )
